@@ -1,15 +1,30 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    users: [],
   },
-  mutations: {
+  getters:{
+    allUsers: (state) => {
+      return state.users
+    }
   },
-  actions: {
+  mutations:{
+    SET_USERS(state, users) {
+        state.users = users
+    }
   },
-  modules: {
-  }
+  actions:{
+    getUsers({commit}) {
+      axios.get('https://randomuser.me/api/?results=100')
+          .then(response => {
+          commit('SET_USERS', response.data.results)
+          // console.log(response.data.results);
+      })
+    }
+  },
 })
