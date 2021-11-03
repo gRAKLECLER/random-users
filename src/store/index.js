@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     users: [],
     numberResult: [1, 10, 100, 200],
+    genreResult: ['male', 'female'],
   },
   getters:{
     allUsers: (state) => {
@@ -19,9 +20,6 @@ export default new Vuex.Store({
         state.users = users
     },
 
-    SET_USER(state, user) {
-      state.users = user
-  },
   },
   actions:{
     getUsers({commit}) {
@@ -35,10 +33,19 @@ export default new Vuex.Store({
     getUserByResult({commit}, number) {
       axios.get(`https://randomuser.me/api/?results=${number}`)
           .then(response => {
-              commit('SET_USER', response.data.results)
+              commit('SET_USERS', response.data.results)
               console.log(response.data.results)
               // console.log(this.state.search)
             })
-        }
+        },
+
+      getUserByGenre({commit}, genre) {
+        axios.get(`https://randomuser.me/api/?gender=${genre}&results=100`)
+            .then(response => {
+                commit('SET_USERS', response.data.results)
+                console.log(response.data.results)
+                // console.log(this.state.search)
+              })
+          }
     }
 })

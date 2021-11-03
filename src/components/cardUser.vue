@@ -1,5 +1,5 @@
 <template>
-  <div class="cards">
+  <div class="cards" v-on="$listeners">
       <h1 class="cards--name">{{ firstname }} - {{ lastname }} </h1> 
       <p class="cards--email"> {{ email }} </p>
       <p class="cards--gender"> {{ gender }} </p>

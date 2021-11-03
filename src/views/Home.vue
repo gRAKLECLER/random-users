@@ -5,15 +5,17 @@
         <router-link to="/">Home</router-link> 
       </div>
     </header>
-    <div class="filterNumber">
-      <button 
-        class="filterNumber__button"
-        v-for="(number, i) in $store.state.numberResult"
-        :key="i"
-        @click="getResultByNumber(number)"
-      >
-        {{ number }}
-      </button>
+    <div class="filter">
+      <BaseButton 
+        :array="$store.state.numberResult"
+        functionName="getUserByResult"
+        @click="getResultFilter(number)"
+      />
+      <BaseButton 
+        :array="$store.state.genreResult"
+        functionName="getUserByGenre"
+        @click="getResultFilter(genre)"
+      />
     </div>
     <section class="card">
         <CardUser v-for="(user,i) in getAllUsers" 
@@ -23,6 +25,7 @@
         :email="user.email"
         :gender="user.gender"
         :country="user.location.country"
+        @click="goToUserPage(user.login.uuid)"
         />
     </section>
   </div>
@@ -30,6 +33,7 @@
 
 <script>
 import CardUser from '@/components/cardUser.vue'
+import BaseButton from '@/components/baseButton.vue'
 
 export default {
   name: 'Home',
@@ -39,6 +43,7 @@ export default {
   },
   components: {
     CardUser,
+    BaseButton,
   },
   mounted(){
     this.$store.dispatch("getUsers");
@@ -51,13 +56,13 @@ export default {
   },
 
   methods:{
-    getResultByNumber(number) {
-        this.$store.dispatch("getUserByResult", number);
-    },
-  
     getUsers() {
         this.$store.dispatch("getUsers");
     },
+    
+    goToUserPage(id){
+      this.$router.push({ name: 'User', params: { id: id } })
+    }
   }
 }
 </script>
@@ -84,28 +89,10 @@ export default {
     color: white;
   }
 
-  .filterNumber {
+  .filter{
     padding: 1rem;
     display: flex;
     justify-content: flex-end;
-  }
-
-  .filterNumber__button {
-    cursor: pointer;
-    margin-right: 1rem;
-    border: none;
-    padding: .5rem;
-    border-radius: 10px;
-    background-color: rgb(82, 82, 194);
-    color: white;
-
-    &:hover {
-      background-color: rgb(94, 94, 206);
-    }
-
-    &:last-child {
-      margin-right: 0;
-    }
   }
 
 </style>
